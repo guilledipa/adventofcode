@@ -50,6 +50,31 @@ func (d *DepthReadings) Increases() (error, int) {
 	return nil, len(increases)
 }
 
+func (d *DepthReadings) SliceSum(numbers []int) int {
+	var sum int
+	for _, n := range numbers {
+		sum += n
+	}
+	return sum
+}
+
+func (d *DepthReadings) SumSlidingWindow() (error, int) {
+	window := 3
+	windowReadings := new(DepthReadings)
+	if len(d.Readings) == 0 {
+		return errors.New("no readings found"), 0
+	}
+	for i := 0; i <= len(d.Readings); i++ {
+		if len(d.Readings[:i]) < window {
+			// Not enough readings
+			continue
+		}
+		windowSum := windowReadings.SliceSum(d.Readings[i-window : i])
+		windowReadings.Readings = append(windowReadings.Readings, windowSum)
+	}
+	return windowReadings.Increases()
+}
+
 func main() {
 	d := new(DepthReadings)
 	if err := d.PopulateReadings("input/readings.txt"); err != nil {
@@ -58,6 +83,11 @@ func main() {
 	if err, inc := d.Increases(); err != nil {
 		log.Fatal(err)
 	} else {
-		fmt.Printf("Number of increases: %d", inc)
+		fmt.Printf("Number of increases: %d\n", inc)
+	}
+	if err, swInc := d.SumSlidingWindow(); err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Printf("Number of sliding window increases: %d\n", swInc)
 	}
 }
