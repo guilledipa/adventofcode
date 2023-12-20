@@ -3,6 +3,7 @@ package tools
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"unicode"
@@ -34,8 +35,12 @@ func findDigits(calibrationValue string) []int {
 	var digits []int
 	for _, c := range calibrationValue {
 		if unicode.IsDigit(c) {
-			fmt.Println("TEST: ", c)
-			digits = append(digits, strconv.Atoi(c)) //FIX
+			d, err := strconv.Atoi(string(c))
+			if err != nil {
+				log.Printf("Unable to convert '%s' to int: %v", string(c), err)
+				continue
+			}
+			digits = append(digits, d)
 		}
 	}
 	return digits
@@ -45,17 +50,29 @@ func findDigits(calibrationValue string) []int {
 // provided in an input file.
 func CheckCalibrationValues(filePath string) (int, error) {
 	var checkSum int
+	var value int
 	lines, err := readInputFile(filePath)
 	if err != nil {
 		return checkSum, err
 	}
 	for _, cv := range lines {
 		digits := findDigits(cv)
-		fmt.Println(digits)
-		if len(digits) < 2 {
+		switch cvs := len(digits); cvs {
+		case 0:
 			continue
+		case 1: // 1 then we create a double-digit using the same CV.
+			value, err = strconv.Atoi(fmt.Sprintf("%d%d", digits[0], digits[0]))
+			if err != nil {
+				return checkSum, err
+			}
+		default: // 2 or more CVs we create a double digit using the first and last CVs.
+			value, err = strconv.Atoi(fmt.Sprintf("%d%d", digits[0], digits[len(digits)-1]))
+			if err != nil {
+				return checkSum, err
+			}
 		}
-		fmt.Printf("%d-%d\n", digits[0], digits[len(digits)-1])
+		checkSum += value
+		log.Printf("Partial sum: %d", checkSum)
 	}
 	return checkSum, nil
 }
