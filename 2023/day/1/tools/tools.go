@@ -65,7 +65,7 @@ func findDigits(calibrationValue string) []int {
 			}
 			digits = append(digits, d)
 		}
-		if unicode.IsLetter(c) {
+		if unicode.IsLetter(c) { // Unnecessary actually.
 			for _, number := range calibrationValueMapKeys() {
 				if strings.HasPrefix(calibrationValue[i:], number) {
 					digits = append(digits, calibrationValueMappings[number])
