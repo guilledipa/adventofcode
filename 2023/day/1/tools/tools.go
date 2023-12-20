@@ -72,7 +72,6 @@ func CheckCalibrationValues(filePath string) (int, error) {
 			}
 		}
 		checkSum += value
-		log.Printf("Partial sum: %d", checkSum)
 	}
 	return checkSum, nil
 }
