@@ -6,8 +6,31 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"unicode"
 )
+
+var calibrationValueMappings = map[string]int{
+	"one":   1,
+	"two":   2,
+	"three": 3,
+	"four":  4,
+	"five":  5,
+	"six":   6,
+	"seven": 7,
+	"eight": 8,
+	"nine":  9,
+}
+
+func calibrationValueMapKeys() []string {
+	keys := make([]string, len(calibrationValueMappings))
+	i := 0
+	for k := range calibrationValueMappings {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
 
 // readInputFile reads the contents of a given file provided by it's path and
 // returns a list containing every line in the file or an error if the program
@@ -33,7 +56,7 @@ func readInputFile(filePath string) ([]string, error) {
 
 func findDigits(calibrationValue string) []int {
 	var digits []int
-	for _, c := range calibrationValue {
+	for i, c := range calibrationValue {
 		if unicode.IsDigit(c) {
 			d, err := strconv.Atoi(string(c))
 			if err != nil {
@@ -41,6 +64,15 @@ func findDigits(calibrationValue string) []int {
 				continue
 			}
 			digits = append(digits, d)
+		}
+		if unicode.IsLetter(c) {
+			for _, number := range calibrationValueMapKeys() {
+				if strings.HasPrefix(calibrationValue[i:], number) {
+					digits = append(digits, calibrationValueMappings[number])
+				} else {
+					continue
+				}
+			}
 		}
 	}
 	return digits
