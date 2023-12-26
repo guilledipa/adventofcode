@@ -32,10 +32,10 @@ func calibrationValueMapKeys() []string {
 	return keys
 }
 
-// readInputFile reads the contents of a given file provided by it's path and
+// ReadInputFile reads the contents of a given file provided by it's path and
 // returns a list containing every line in the file or an error if the program
 // was unable to read the file.
-func readInputFile(filePath string) ([]string, error) {
+func ReadInputFile(filePath string) ([]string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func findDigits(calibrationValue string) []int {
 func CheckCalibrationValues(filePath string) (int, error) {
 	var checkSum int
 	var value int
-	lines, err := readInputFile(filePath)
+	lines, err := ReadInputFile(filePath)
 	if err != nil {
 		return checkSum, err
 	}
