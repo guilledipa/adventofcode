@@ -13,5 +13,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	logInfo.Printf("Valid Games ID sum: %d", games.IDSumValidGames())
+	logInfo.Printf("Valid Games ID total sum: %d", games.IDSumValidGames())
+	logInfo.Printf("Power of cubes total sum: %d", games.SumPowerOfCubes())
 }

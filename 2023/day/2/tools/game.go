@@ -34,6 +34,23 @@ func (g *Game) setValidGame() bool {
 	return true
 }
 
+func (g *Game) PowerOfCubes() int {
+	var R, G, B int
+	for _, d := range g.Draws {
+		if d.Red > R {
+			R = d.Red
+		}
+		if d.Green > G {
+			G = d.Green
+		}
+		if d.Blue > B {
+			B = d.Blue
+		}
+	}
+	// Assumption: there are no games played with 0 cubes (wouldn't make sense)
+	return R * G * B
+}
+
 type Games struct {
 	Games []Game
 }
@@ -46,6 +63,14 @@ func (gs *Games) IDSumValidGames() int {
 		}
 	}
 	return idSumValidGames
+}
+
+func (gs *Games) SumPowerOfCubes() int {
+	var sumPowerOfCubes int
+	for _, g := range gs.Games {
+		sumPowerOfCubes += g.PowerOfCubes()
+	}
+	return sumPowerOfCubes
 }
 
 func NewGames(filePath string) (*Games, error) {
