@@ -9,7 +9,7 @@ import (
 func main() {
 	logInfo := log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime)
 
-	parts, err := tools.GetPartNumbers("test.txt")
+	parts, err := tools.GetPartNumbers("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
