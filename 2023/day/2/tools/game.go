@@ -22,10 +22,30 @@ type Draw struct {
 type Game struct {
 	Id    int
 	Draws []Draw
+	Valid bool
+}
+
+func (g *Game) setValidGame() bool {
+	for _, d := range g.Draws {
+		if d.Red > maxRed || d.Green > maxGreen || d.Blue > maxBlue {
+			return false
+		}
+	}
+	return true
 }
 
 type Games struct {
 	Games []Game
+}
+
+func (gs *Games) IDSumValidGames() int {
+	var idSumValidGames int
+	for _, g := range gs.Games {
+		if g.Valid {
+			idSumValidGames += g.Id
+		}
+	}
+	return idSumValidGames
 }
 
 func NewGames(filePath string) (*Games, error) {
@@ -48,7 +68,6 @@ func NewGames(filePath string) (*Games, error) {
 		game.Id = id
 		// Draws
 		for _, ds := range strings.Split(gameSplit[1], ";") { // [ " 3 blue, 4 red", " 1 red, 2 green, 6 blue", " 2 green"]
-			fmt.Println(ds)
 			var draw Draw
 			for _, d := range strings.Split(ds, ",") { // [" 3 blue", "4 red"]
 				cubesColor := strings.Split(strings.TrimSpace(d), " ") // Careful with spaces.
@@ -70,6 +89,7 @@ func NewGames(filePath string) (*Games, error) {
 			draws = append(draws, draw)
 		}
 		game.Draws = draws
+		game.Valid = game.setValidGame()
 		games.Games = append(games.Games, game)
 	}
 	return games, nil
