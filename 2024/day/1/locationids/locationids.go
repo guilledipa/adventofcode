@@ -12,11 +12,13 @@ import (
 
 // LocationIDs hold historically significant locations.
 type LocationIDs struct {
-	left  []int
-	right []int
+	Left  []int
+	Right []int
 }
 
-func (l *LocationIDs) populateVectors(file string) error {
+// PopulateVectors parses a file and populates the righ and left fields in the
+// LocationIDs struct
+func (l *LocationIDs) PopulateVectors(file string) error {
 	f, err := os.Open(file)
 	if err != nil {
 		return err
@@ -30,26 +32,26 @@ func (l *LocationIDs) populateVectors(file string) error {
 		if err != nil {
 			return err
 		}
-		l.left = append(l.left, leftInt)
+		l.Left = append(l.Left, leftInt)
 		rightInt, err := strconv.Atoi(IDs[1])
 		if err != nil {
 			return err
 		}
-		l.right = append(l.right, rightInt)
+		l.Right = append(l.Right, rightInt)
 	}
 	l.sortVectors()
 	return scanner.Err()
 }
 
 func (l *LocationIDs) sortVectors() {
-	sort.Ints(l.left)
-	sort.Ints(l.right)
+	sort.Ints(l.Left)
+	sort.Ints(l.Right)
 }
 
-func (l *LocationIDs) computeTotalDistance() float64 {
+func (l *LocationIDs) ComputeTotalDistance() float64 {
 	var totalDistance float64
-	for i := 0; i < len(l.left)-1; i++ {
-		totalDistance += math.Abs(float64(l.right[i] - l.left[i]))
+	for i := 0; i < len(l.Left); i++ {
+		totalDistance += math.Abs(float64(l.Right[i] - l.Left[i]))
 	}
 	return totalDistance
 }
