@@ -11,5 +11,5 @@ func main() {
 	if err := locs.PopulateVectors("input/location_ids.txt"); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(int(locs.ComputeTotalDistance()))
+	fmt.Println(locs.ComputeTotalDistance())
 }

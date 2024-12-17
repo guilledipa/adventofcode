@@ -29,7 +29,7 @@ func TestComputeTotalDistance(t *testing.T) {
 	testCases := []struct {
 		left             []int
 		right            []int
-		expectedDistance float64
+		expectedDistance int
 	}{
 		{[]int{1, 2, 3}, []int{4, 5, 6}, 9},
 		{[]int{1, 2}, []int{5, 1}, 5},
@@ -41,7 +41,7 @@ func TestComputeTotalDistance(t *testing.T) {
 			locs := &locationids.LocationIDs{Left: tc.left, Right: tc.right}
 			totalDistance := locs.ComputeTotalDistance()
 			if totalDistance != tc.expectedDistance {
-				t.Errorf("Expected total distance: %f, but got %f", tc.expectedDistance, totalDistance)
+				t.Errorf("Expected total distance: %d, but got %d", tc.expectedDistance, totalDistance)
 			}
 		})
 
