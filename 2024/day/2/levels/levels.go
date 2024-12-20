@@ -40,22 +40,32 @@ func (r *Reports) PopulateReports(file string) error {
 	return scanner.Err()
 }
 
-// BUG!!!!
-func isSafe(levels []int) bool {
-	for i := 0; i < len(levels)-1; i++ {
-		if levels[i] > levels[i+1] { // Increasing
-			if utils.AbsDistance(levels[i], levels[i+1]) > 3 {
-				return false // Distance is greater than 3
-			}
-			continue
-		} else if levels[i] < levels[i+1] { // Decreasing
-			if utils.AbsDistance(levels[i], levels[i+1]) > 3 {
-				return false // Distance is greater than 3
-			}
-			continue
-		} else {
-			return false // Equal numbers
+// CountSafe returns the number of safe reports.
+func (r *Reports) CountSafe() int {
+	var count int
+	for _, rep := range *r {
+		if rep.Safe {
+			count++
 		}
+	}
+	return count
+}
+
+// isSafe checks if the levels are safe based on the rules.
+func isSafe(levels []int) bool {
+	increasing := levels[1] > levels[0] // Check initial direction
+	for i := 0; i < len(levels)-1; i++ {
+		diff := levels[i+1] - levels[i]
+		if increasing {
+			if diff < 1 || diff > 3 {
+				return false // Not increasing within range
+			}
+		} else {
+			if diff > -1 || diff < -3 {
+				return false // Not decreasing within range
+			}
+		}
+		continue
 	}
 	return true
 }

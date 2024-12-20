@@ -8,8 +8,8 @@ import (
 
 func main() {
 	reps := new(levels.Reports)
-	if err := reps.PopulateReports("input/test_input.txt"); err != nil {
+	if err := reps.PopulateReports("input/levels.txt"); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(reps)
+	fmt.Println(reps.CountSafe())
 }
