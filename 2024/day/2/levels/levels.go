@@ -53,6 +53,22 @@ func (r *Reports) CountSafe() int {
 
 // isSafe checks if the levels are safe based on the rules.
 func isSafe(levels []int) bool {
+	if checkSafety(levels) {
+		return true
+	}
+	for i := range levels {
+		modifiedLevels := make([]int, len(levels)-1)
+		copy(modifiedLevels, levels[:i])
+		copy(modifiedLevels[i:], levels[i+1:])
+		if checkSafety(modifiedLevels) {
+			return true
+		}
+	}
+	return false
+}
+
+// checkSafety checks if the levels are safe without removing any level.
+func checkSafety(levels []int) bool {
 	increasing := levels[1] > levels[0] // Check initial direction
 	for i := 0; i < len(levels)-1; i++ {
 		diff := levels[i+1] - levels[i]
@@ -65,7 +81,6 @@ func isSafe(levels []int) bool {
 				return false // Not decreasing within range
 			}
 		}
-		continue
 	}
 	return true
 }
