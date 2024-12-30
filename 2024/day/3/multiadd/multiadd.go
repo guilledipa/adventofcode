@@ -30,8 +30,8 @@ func AccumulateAllMul(data []byte) int {
 	acum := 0
 	dontCount := false
 	for _, match := range matches {
-		// Check if we should skip the next multiplication (P3 - Part 2). Also
-		// Had to update the RegEx to match the new patterns.
+		// Check if we should skip the next multiplication (D3P2). Also
+		// had to update the RegEx to match the new patterns.
 		if string(match) == "don't()" {
 			dontCount = true
 			continue
