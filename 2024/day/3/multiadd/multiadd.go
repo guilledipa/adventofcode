@@ -25,10 +25,23 @@ func ProcessData(file string) ([]byte, error) {
 
 // AccumulateAllMul will accumulate all the valid multiplication operations in the data.
 func AccumulateAllMul(data []byte) int {
-	re := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)`)
+	re := regexp.MustCompile(`mul\(\d{1,3},\d{1,3}\)|don't\(\)|do\(\)`)
 	matches := re.FindAll(data, -1)
 	acum := 0
+	dontCount := false
 	for _, match := range matches {
+		// Check if we should skip the next multiplication (P3 - Part 2). Also
+		// Had to update the RegEx to match the new patterns.
+		if string(match) == "don't()" {
+			dontCount = true
+			continue
+		} else if string(match) == "do()" {
+			dontCount = false
+			continue
+		}
+		if dontCount {
+			continue
+		}
 		re := regexp.MustCompile(`(\d{1,3})`)
 		digits := re.FindAllString(string(match), -1)
 		a, b, err := ConvertToInts(digits)
