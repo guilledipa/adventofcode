@@ -1,9 +1,14 @@
 package main
 
 import (
+	"adventofcode/2024/day/4/search"
 	"log"
 )
 
 func main() {
-	log.Printf("Total findings: %d", 0)
+	d, err := search.NewData("input/test_data.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Total findings: %d", d.CountXMAS())
 }
