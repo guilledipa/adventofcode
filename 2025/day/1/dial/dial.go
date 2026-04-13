@@ -35,18 +35,19 @@ func execInstruction(instruction string, dialPosition int) (int, int, error) {
 	var deltaPosition int
 	direction, clicks, err := parseInstruction(instruction)
 	if err != nil {
-		return dialPosition, err
+		return dialPosition, 0, err
 	}
 	// Unwrapping the dial into an array it would look like this:
 	// dial := [0..99] -> Len(dial) = 100
 	// Direction
 	//   L -> Cursor moves left in the array -> Negative index
 	//   R -> Cursor moves right in the array -> Positive index
-	if direction == "L" {
+	switch direction {
+	case "L":
 		deltaPosition = dialPosition - (-clicks)
-	} else if direction == "R" {
+	case "R":
 		deltaPosition = dialPosition - clicks
-	} else {
+	default:
 		return dialPosition, 0, fmt.Errorf("impossible direction: %q", direction)
 	}
 	zeroCount := deltaPosition / dialNumbers
