@@ -1,29 +1,15 @@
 package main
 
 import (
-	"adventofcode/utils"
+	"adventofcode/2025/day/1/dial"
 	"fmt"
-	"log"
-	"os"
 )
 
 const (
-	// inputData = "input/data.txt"
-	inputData = "input/test_data.txt"
-	dialInit  = 50
+	inputData = "input/data.txt"
 )
 
 func main() {
-	fmt.Println("hello world!")
-	s, f, err := utils.CreateScanner(inputData)
-	if err != nil {
-		log.Fatalf("Unable to read input data: %q", err)
-	}
-	defer f.Close()
-	for s.Scan() {
-		fmt.Println(s.Text())
-	}
-	if err := s.Err(); err != nil {
-		fmt.Fprintln(os.Stderr, "reading standard input:", err)
-	}
+	zeros := dial.UseDial(inputData)
+	fmt.Printf("Number of zeros encountered: %d\n", zeros)
 }
