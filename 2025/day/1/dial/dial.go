@@ -21,7 +21,7 @@ type Dial struct {
 	Zeros    int
 }
 
-func UseDial(instructions string) int {
+func UseDial(instructions string, countRevs bool) int {
 	s, f, err := utils.CreateScanner(instructions)
 	if err != nil {
 		log.Fatalf("Unable to read input data: %q", err)
@@ -33,7 +33,7 @@ func UseDial(instructions string) int {
 	}
 	for s.Scan() {
 		instruction := s.Text()
-		if err := d.execInstruction(instruction); err != nil {
+		if err := d.execInstruction(instruction, countRevs); err != nil {
 			log.Fatalf("Error executing instruction %q: %v", instruction, err)
 		}
 	}
@@ -43,7 +43,7 @@ func UseDial(instructions string) int {
 	return d.Zeros
 }
 
-func (d *Dial) execInstruction(instruction string) error {
+func (d *Dial) execInstruction(instruction string, countRevs bool) error {
 	var deltaPosition int
 	direction, clicks, err := parseInstruction(instruction)
 	if err != nil {
@@ -64,14 +64,33 @@ func (d *Dial) execInstruction(instruction string) error {
 	default:
 		return fmt.Errorf("impossible direction: %q", direction)
 	}
-	// We don't care about the number of revolutions, we just want to know the final position
-	// on the dial, so we can use modulo to wrap around the dial.
-	d.Position = (deltaPosition + d.Numbers) % d.Numbers
-	if d.Position == 0 {
+	// The new position is the deltaPosition modulo the number of positions in the dial.
+	// This ensures that the position wraps around correctly when it goes below 0 or above 99.
+	newPosition := ((deltaPosition % d.Numbers) + d.Numbers) % d.Numbers
+	if countRevs {
+		d.Zeros += countZeroCrossings(direction, d.Position, clicks, d.Numbers)
+	} else if newPosition == 0 && d.Position != 0 {
 		d.Zeros++
 	}
-	log.Printf("Dial position: %d, zeros: %d", d.Position, d.Zeros)
+	d.Position = newPosition // Store the new position for the next instruction.
 	return nil
+}
+
+func countZeroCrossings(direction string, position, clicks, dialScale int) int {
+	switch direction {
+	case "R":
+		return (position + clicks) / dialScale
+	case "L":
+		if clicks < position {
+			return 0
+		}
+		if position == 0 {
+			return clicks / dialScale
+		}
+		return (clicks-position)/dialScale + 1
+	default:
+		return 0
+	}
 }
 
 func parseInstruction(instruction string) (string, int, error) {

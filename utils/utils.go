@@ -18,3 +18,10 @@ func CreateScanner(file string) (*bufio.Scanner, *os.File, error) {
 	scanner := bufio.NewScanner(f)
 	return scanner, f, scanner.Err()
 }
+
+func Abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}

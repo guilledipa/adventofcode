@@ -23,6 +23,7 @@ func TestExecInstruction(t *testing.T) {
 		{"L99", 99, 2, 0, 3, false},
 		{"R14", 0, 3, 14, 3, false},
 		{"L82", 14, 3, 32, 3, false},
+		{"L898", 52, 0, 54, 0, false},
 	}
 	for _, tc := range testCases {
 		dial := Dial{
@@ -30,7 +31,7 @@ func TestExecInstruction(t *testing.T) {
 			Position: tc.position,
 			Zeros:    tc.zeros,
 		}
-		err := dial.execInstruction(tc.in)
+		err := dial.execInstruction(tc.in, false)
 		if tc.wantErr && err == nil {
 			t.Errorf("ExecInstruction(%q) expected error but got none", tc.in)
 		}
@@ -70,6 +71,27 @@ func TestParseInstruction(t *testing.T) {
 		}
 		if clicks != tc.clicks {
 			t.Errorf("parseInstruction(%q) expected clicks %d but got %d", tc.in, tc.clicks, clicks)
+		}
+	}
+}
+
+func TestCountZeroCrossings(t *testing.T) {
+	var testCases = []struct {
+		direction string
+		start     int
+		clicks    int
+		want      int
+	}{
+		{"L", 44, 44, 1},
+		{"L", 0, 39, 0},
+		{"L", 0, 100, 1},
+		{"L", 55, 55, 1},
+		{"R", 0, 100, 1},
+	}
+	for _, tc := range testCases {
+		got := countZeroCrossings(tc.direction, tc.start, tc.clicks, dialNumbers)
+		if got != tc.want {
+			t.Errorf("countZeroCrossings(%q, %d, %d) = %d; want %d", tc.direction, tc.start, tc.clicks, got, tc.want)
 		}
 	}
 }
