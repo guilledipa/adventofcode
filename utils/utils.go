@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strconv"
 )
 
 // CreateScanner is a helper function to scan files line by line.
@@ -24,4 +25,16 @@ func Abs(x int) int {
 		return -x
 	}
 	return x
+}
+
+func StrToInt(strings []string) []int {
+	ints := make([]int, 0, len(strings))
+	for _, s := range strings {
+		i, err := strconv.Atoi(s)
+		if err != nil {
+			continue
+		}
+		ints = append(ints, i)
+	}
+	return ints
 }
