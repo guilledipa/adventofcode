@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // CreateScanner is a helper function to scan files line by line.
@@ -69,4 +70,22 @@ func StrToInt(strings []string) []int {
 		ints = append(ints, i)
 	}
 	return ints
+}
+
+// ReadMatrix is a helper function to read a file into a slice of strings.
+// Each string represents a line in the file. This is useful for problems
+// that require processing data in a matrix format, such as grids or maps.
+func ReadMatrix(file string) ([][]string, error) {
+	var lines []string
+	if err := ProcessLines(file, func(line string) error {
+		lines = append(lines, line)
+		return nil
+	}); err != nil {
+		return nil, err
+	}
+	matrix := make([][]string, len(lines))
+	for i, line := range lines {
+		matrix[i] = strings.Split(line, "")
+	}
+	return matrix, nil
 }
