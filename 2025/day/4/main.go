@@ -7,10 +7,10 @@ import (
 )
 
 func main() {
-	rolls, err := forklift.Forklift("input/data.txt")
+	rolls1, rolls, err := forklift.Forklift("input/data.txt")
 	if err != nil {
 		log.Fatalf("Error: %v\n", err)
 
 	}
-	fmt.Printf("Result: %d\n", rolls)
+	fmt.Printf("Result: %d, %d\n", rolls1, rolls)
 }

@@ -5,24 +5,45 @@ import (
 	"log"
 )
 
-func Forklift(file string) (int, error) {
-	var rolls int
+func Forklift(file string) (int, int, error) {
+	var rolls1 int
+	var rolls int // Part 2 rolls
+	var rollsPrev int
+	var passes int
+
 	m, err := utils.ReadMatrix(file)
 	if err != nil {
-		return 0, err
+		return 0, 0, err
 	}
-	// Check all positions in the matrix
+	// Part 1 counts rolls first pass only.
 	for r := 0; r < len(m); r++ { // Rows
 		for c := 0; c < len(m[r]); c++ { // Columns
 			if m[r][c] != "@" {
 				continue
 			}
 			if isForkliftable(m, r, c) {
-				rolls++
+				rolls1++
 			}
 		}
 	}
-	return rolls, nil
+
+	// Part 2 resets the matrix and counts rolls until no more can be removed.
+	for rolls > rollsPrev && passes < 1000 || passes == 0 {
+		passes++
+		rollsPrev = rolls
+		for r := 0; r < len(m); r++ { // Rows
+			for c := 0; c < len(m[r]); c++ { // Columns
+				if m[r][c] != "@" {
+					continue
+				}
+				if isForkliftable(m, r, c) {
+					rolls++
+					m[r][c] = "." // Mark as removed
+				}
+			}
+		}
+	}
+	return rolls1, rolls, nil
 }
 
 // isForkliftable checks if the forklift can move to the given
