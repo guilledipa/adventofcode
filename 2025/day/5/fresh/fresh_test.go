@@ -11,7 +11,7 @@ func TestChecker(t *testing.T) {
 		wantPart2 int
 		wantErr   bool
 	}{
-		{"../input/test_data.txt", 3, 0, false},
+		{"../input/test_data.txt", 3, 14, false},
 	}
 
 	for _, c := range tc {

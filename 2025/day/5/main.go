@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	part1, part2, err := fresh.Checker("2025/day/5/fresh/input.txt")
+	part1, part2, err := fresh.Checker("input/data.txt")
 	if err != nil {
 		panic(err)
 	}

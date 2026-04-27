@@ -60,6 +60,7 @@ func Abs(x int) int {
 	return x
 }
 
+// StrToInt is a helper function to convert a slice of strings to a slice of integers.
 func StrToInt(strings []string) []int {
 	ints := make([]int, 0, len(strings))
 	for _, s := range strings {
