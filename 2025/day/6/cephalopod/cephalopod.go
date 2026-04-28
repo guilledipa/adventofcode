@@ -65,8 +65,7 @@ func Part2(m [][]string, arithmeticOps int) (int, error) {
 	var grandTotal int
 	var columnTotal int
 	var partial []int
-	//var problem int
-	// Process left to right.
+	// Process right to left.
 	for c := len(m[0]) - 1; c >= 0; c-- {
 		var sb strings.Builder
 		var opSb strings.Builder
