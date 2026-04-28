@@ -11,7 +11,7 @@ func Forklift(file string) (int, int, error) {
 	var rollsPrev int
 	var passes int
 
-	m, err := utils.ReadMatrix(file)
+	m, err := utils.ReadMatrix(file, "")
 	if err != nil {
 		return 0, 0, err
 	}

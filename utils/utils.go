@@ -76,7 +76,8 @@ func StrToInt(strings []string) []int {
 // ReadMatrix is a helper function to read a file into a slice of strings.
 // Each string represents a line in the file. This is useful for problems
 // that require processing data in a matrix format, such as grids or maps.
-func ReadMatrix(file string) ([][]string, error) {
+// Note: " " represents space-delimited values.
+func ReadMatrix(file, delimiter string) ([][]string, error) {
 	var lines []string
 	if err := ProcessLines(file, func(line string) error {
 		lines = append(lines, line)
@@ -86,7 +87,11 @@ func ReadMatrix(file string) ([][]string, error) {
 	}
 	matrix := make([][]string, len(lines))
 	for i, line := range lines {
-		matrix[i] = strings.Split(line, "")
+		if delimiter == " " {
+			matrix[i] = strings.Fields(line)
+		} else {
+			matrix[i] = strings.Split(line, delimiter)
+		}
 	}
 	return matrix, nil
 }
