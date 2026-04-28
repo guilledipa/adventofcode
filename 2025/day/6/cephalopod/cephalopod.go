@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"strings"
 )
 
 func CalculateTotal(file string) (int, int, error) {
@@ -18,6 +19,8 @@ func CalculateTotal(file string) (int, int, error) {
 	if err != nil {
 		return 0, 0, err
 	}
+	// re-read the matrix, now with a different delimeter cos now
+	// every position matters.
 	m, err = utils.ReadMatrix(file, "")
 	p2, err := Part2(m, arithmeticOps)
 	if err != nil {
@@ -59,7 +62,49 @@ func Part1(m [][]string, arithmeticOps int) (int, error) {
 }
 
 func Part2(m [][]string, arithmeticOps int) (int, error) {
-	// TODO - Implement Part 2 logic based on the problem requirements.
-	fmt.Println(m)
-	return 3263827, nil
+	var grandTotal int
+	var columnTotal int
+	var partial []int
+	//var problem int
+	// Process left to right.
+	for c := len(m[0]) - 1; c >= 0; c-- {
+		var sb strings.Builder
+		var opSb strings.Builder
+		for r := range arithmeticOps {
+			sb.WriteString(m[r][c])
+		}
+		if c < len(m[arithmeticOps]) {
+			opSb.WriteString(m[arithmeticOps][c])
+		}
+		sn := strings.TrimSpace(sb.String())
+		if sn == "" {
+			continue
+		}
+		n, err := strconv.Atoi(sn)
+		if err != nil {
+			return 0, err
+		}
+		partial = append(partial, n)
+		op := strings.TrimSpace(opSb.String())
+		if op != "" {
+			for _, p := range partial {
+				switch op {
+				case "+":
+					columnTotal += p
+				case "*":
+					if columnTotal == 0 {
+						columnTotal = p
+					} else {
+						columnTotal *= p
+					}
+				default:
+					return 0, fmt.Errorf("Unknown operator: %s", op)
+				}
+			}
+			grandTotal += columnTotal
+			columnTotal = 0 // Reset column total after processing
+			partial = nil   // Reset partial after processing
+		}
+	}
+	return grandTotal, nil
 }
