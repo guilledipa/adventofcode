@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	Part1, Part2, err := tachyonmanifold.CalculateTotal("../input/input.txt")
+	Part1, Part2, err := tachyonmanifold.CalculateTotal("./input/data.txt")
 	if err != nil {
 		log.Fatalf("Error calculating totals: %v", err)
 	}
