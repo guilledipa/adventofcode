@@ -9,7 +9,7 @@ func TestCalculateTotal(t *testing.T) {
 		wantPart2 int
 		wantErr   bool
 	}{
-		{"../input/test_data.txt", 21, 0, false},
+		{"../input/test_data.txt", 21, 40, false},
 	}
 
 	for _, c := range tc {
